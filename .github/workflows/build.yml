@@ -422,13 +422,10 @@ jobs:
         run: |
           VERSION="${{ steps.meta.outputs.version }}"
 
-          # Use RELEASE_NOTES.md from repo if present; otherwise generate a minimal fallback
-          if [ -f "RELEASE_NOTES.md" ]; then
-            echo "Using RELEASE_NOTES.md from repository"
-            cp RELEASE_NOTES.md release-notes.md
-          else
-            echo "RELEASE_NOTES.md not found, generating default notes"
-            cat > release-notes.md << NOTES_EOF
+          # Generate release notes with dynamic links pointing to this repository.
+          # (Upstream RELEASE_NOTES.md is intentionally ignored to avoid hardcoded
+          # owner/repo URLs that break fork releases.)
+          cat > release-notes.md << NOTES_EOF
           ## ${{ github.event.repository.name }} v${VERSION}
 
           ## 下载地址
@@ -451,7 +448,6 @@ jobs:
           - 需要配置 API 服务商（Anthropic / OpenRouter 等）
           - 推荐安装 Claude Code CLI 以获得完整功能
           NOTES_EOF
-          fi
 
           # Merge per-platform checksums into a single file
           echo "## SHA-256 Checksums" > artifacts/SHA256SUMS.txt
