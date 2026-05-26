@@ -426,7 +426,7 @@ export function ChatListPanel({ open, width, hasUpdate, readyToInstall }: ChatLi
     { href: "/mcp", label: t('nav.mcp' as TranslationKey), icon: Plug },
     { href: "/cli-tools", label: t('nav.cliTools' as TranslationKey), icon: Terminal },
     { href: "/gallery", label: t('nav.gallery' as TranslationKey), icon: Image },
-    { href: "/bridge", label: t('nav.bridge' as TranslationKey), icon: WifiHigh },
+    // Bridge disabled — see bridge-manager.ts start()
   ];
 
   return (
