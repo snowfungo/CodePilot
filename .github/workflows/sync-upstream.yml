@@ -1,0 +1,72 @@
+name: Sync Upstream
+
+on:
+  schedule:
+    # 每天凌晨 3 点 UTC 检查一次（北京时间 11 点）
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote
+        run: git remote add upstream https://github.com/op7418/CodePilot.git
+
+      - name: Fetch upstream
+        run: git fetch upstream
+
+      - name: Check for new commits
+        id: check
+        run: |
+          LOCAL=$(git rev-parse HEAD)
+          UPSTREAM=$(git rev-parse upstream/main)
+          if [ "$LOCAL" = "$UPSTREAM" ]; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            echo "✅ Upstream is already up-to-date."
+          else
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            echo "📥 New commits found on upstream/main"
+            echo "local=$LOCAL" >> "$GITHUB_OUTPUT"
+            echo "upstream=$UPSTREAM" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Merge upstream (auto)
+        if: steps.check.outputs.has_changes == 'true'
+        id: merge
+        run: |
+          git merge upstream/main --no-edit || {
+            echo "merge_conflict=true" >> "$GITHUB_OUTPUT"
+            echo "❌ Merge conflict detected"
+            exit 1
+          }
+
+      - name: Push merged changes
+        if: steps.check.outputs.has_changes == 'true' && steps.merge.outputs.merge_conflict != 'true'
+        run: |
+          git push origin main
+          echo "✅ Successfully merged and pushed upstream changes"
+
+      - name: Create conflict issue
+        if: failure() && steps.merge.outputs.merge_conflict == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --title "Upstream sync conflict - $(date +%Y-%m-%d)" \
+            --body "自动同步上游 \`op7418/CodePilot\` 时发生合并冲突，需要手动解决。\n\n请执行：\n\n\`\`\`bash\ngit fetch upstream\ngit merge upstream/main\n# 解决冲突后\ngit push origin main\n\`\`\`" \
+            --label "upstream-sync"

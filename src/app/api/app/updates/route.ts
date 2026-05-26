@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getRuntimeArchitectureInfo } from "@/lib/platform";
 import { selectRecommendedReleaseAsset, type ReleaseAsset } from "@/lib/update-release";
 
-const GITHUB_REPO = "op7418/CodePilot";
+const GITHUB_REPO = "snowfungo/CodePilot";
 
 function noUpdatePayload(currentVersion: string, runtimeInfo: ReturnType<typeof getRuntimeArchitectureInfo>) {
   return {

@@ -2,7 +2,7 @@ appId: com.codepilot.app
 productName: CodePilot
 publish:
   provider: github
-  owner: op7418
+  owner: snowfungo
   repo: CodePilot
 directories:
   output: release
@@ -81,7 +81,7 @@ linux:
   desktop:
     entry:
       Name: CodePilot
-      Comment: A native desktop GUI for Claude Code
+      Comment: A multi-model AI agent desktop client
       Categories: Development;IDE;
       StartupWMClass: codepilot
   # arch is NOT specified here — controlled by CI via --x64 / --arm64 CLI flags.

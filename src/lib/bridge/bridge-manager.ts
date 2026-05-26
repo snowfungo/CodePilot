@@ -261,6 +261,9 @@ export interface StartResult {
  * Returns a result indicating success/failure with a reason.
  */
 export async function start(): Promise<StartResult> {
+  // Bridge/IM integration permanently disabled — keep code for reference but never start
+  return { started: false, reason: 'disabled' };
+
   const state = getState();
   if (state.running) return { started: true };
 

@@ -8,9 +8,9 @@
     "packages/*"
   ],
   "author": {
-    "name": "op7418",
-    "email": "guohao631@gmail.com",
-    "url": "https://x.com/op7418"
+    "name": "snowfungo",
+    "email": "snowfungo@snow66.com",
+    "url": "https://github.com/snowfungo"
   },
   "description": "A multi-model AI agent desktop client",
   "main": "dist-electron/main.js",
