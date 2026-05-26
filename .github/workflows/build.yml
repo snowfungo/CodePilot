@@ -395,7 +395,7 @@ jobs:
       - name: Get version and previous tag
         id: meta
         run: |
-          VERSION=${GITHUB_REF_NAME#v}
+          VERSION=$(node -p "require('./package.json').version")
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           PREV_TAG=$(git tag --sort=-creatordate | grep '^v' | sed -n '2p' || echo "")
           echo "prev_tag=$PREV_TAG" >> "$GITHUB_OUTPUT"
