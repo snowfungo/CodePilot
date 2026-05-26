@@ -284,9 +284,9 @@ export async function start(): Promise<StartResult> {
     const adapter = createAdapter(channelType);
     if (!adapter) continue;
 
-    const configError = adapter.validateConfig();
+    const configError = adapter!.validateConfig();
     if (!configError) {
-      registerAdapter(adapter);
+      registerAdapter(adapter!);
     } else {
       console.warn(`[bridge-manager] ${channelType} adapter not valid:`, configError);
       configErrors.push(`${channelType}: ${configError}`);
