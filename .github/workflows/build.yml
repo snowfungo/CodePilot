@@ -6,12 +6,12 @@ on:
       platform:
         description: "Target platform"
         required: true
-        default: "all"
+        default: "macos"
         type: choice
         options:
+          - macos
           - all
           - windows
-          - macos
           - linux
   pull_request:
     branches: [main]
