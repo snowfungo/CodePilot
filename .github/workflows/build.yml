@@ -75,7 +75,7 @@ jobs:
 
   build-windows:
     needs: [lint-test, smoke-test]
-    if: ${{ github.event_name == 'push' || inputs.platform == 'all' || inputs.platform == 'windows' }}
+    if: ${{ inputs.platform == 'all' || inputs.platform == 'windows' }}
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -206,7 +206,7 @@ jobs:
 
   build-linux-x64:
     needs: [lint-test, smoke-test]
-    if: ${{ github.event_name == 'push' || inputs.platform == 'all' || inputs.platform == 'linux' }}
+    if: ${{ inputs.platform == 'all' || inputs.platform == 'linux' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -289,7 +289,7 @@ jobs:
 
   build-linux-arm64:
     needs: [lint-test, smoke-test]
-    if: ${{ github.event_name == 'push' || inputs.platform == 'all' || inputs.platform == 'linux' }}
+    if: ${{ inputs.platform == 'all' || inputs.platform == 'linux' }}
     # Use a native arm64 runner — avoids fragile cross-compilation toolchain
     # setup that breaks across Ubuntu versions (sources.list vs deb822).
     # Falls back gracefully: if the runner label isn't available, the job
